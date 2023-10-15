@@ -1,5 +1,6 @@
 import React, { useReducer } from "react";
 
+import { validate } from "../../../user/util/validators";
 import "./Input.css";
 
 const inputReducer = (state, action) => {
@@ -8,8 +9,14 @@ const inputReducer = (state, action) => {
       return {
         ...state,
         value: action.val,
-        isValid: true,
+        isValid: validate(action.val, action.validators),
       };
+    case "TOUCH": {
+      return {
+        ...state,
+        isTouched: true
+      }
+    }
     default:
       return state;
   }
@@ -18,11 +25,22 @@ const inputReducer = (state, action) => {
 const Input = (props) => {
   const [inputState, dispatch] = useReducer(inputReducer, {
     value: "",
+    isTouched: false,
     isValid: false,
   });
 
   const changeHandler = (event) => {
-    dispatch({ type: "CHANGE", val: event.target.value });
+    dispatch({
+      type: "CHANGE",
+      val: event.target.value,
+      validators: props.validators,
+    });
+  };
+
+  const touchHandler = () => {
+    dispatch({
+      type: 'TOUCH'
+    });
   };
 
   const element =
@@ -33,19 +51,27 @@ const Input = (props) => {
         placeholder={props.placeholder}
         onChange={changeHandler}
         value={inputState.value}
+        onBlur={touchHandler}
       />
     ) : (
-      <textarea id={props.id} rows={props.rows || 3} onChange={changeHandler} value={inputState.value} />
+      <textarea
+        id={props.id}
+        rows={props.rows || 3}
+        onChange={changeHandler}
+        value={inputState.value}
+        onBlur={touchHandler}
+      />
     );
 
   return (
-    <div 
-      className={`form-control ${!inputState.isValid &&
-        'form-control--invalid'}`}
+    <div
+      className={`form-control ${
+        !inputState.isValid && inputState.isTouched && "form-control--invalid"
+      }`}
     >
       <label htmlFor={props.id}>{props.label}</label>
       {element}
-      {!inputState.isValid && <p>{props.errorText}</p>}
+      {!inputState.isValid && inputState.isTouched && <p>{props.errorText}</p>}
     </div>
   );
 };
