@@ -24,7 +24,7 @@ function App() {
           <Route path="/places/new" exact>
             <NewPlace />
           </Route>
-          <Route path="/places/:placeID:">
+          <Route path="/places/:placeId">
             <UpdatePlace />
           </Route>
           <Redirect to="/" />
