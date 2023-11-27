@@ -5,7 +5,7 @@ import UsersList from "../components/UsersList";
 const Users = () => {
   const USERS = [
     {
-      id: 1,
+      id: 'u1',
       name: "Matt Denune",
       image:
         "https://i1.wp.com/melmagazine.com/wp-content/uploads/2021/01/Gigachad.jpg",
