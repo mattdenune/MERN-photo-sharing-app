@@ -55,9 +55,33 @@ const Auth = () => {
     setIsLoginMode((prevMode) => !prevMode);
   };
 
-  const authSubmitHandler = (event) => {
+  const authSubmitHandler = async (event) => {
     event.preventDefault();
-    console.log(formState.inputs);
+  
+    if (isLoginMode) {
+
+    } else {
+      try {
+        const response = await fetch('http://localhost:5000/api/users/signup', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: formState.inputs.name.value,
+            email: formState.inputs.email.value,
+            password: formState.inputs.password.value
+          })
+        });
+
+        const responseData = response.json();
+        console.log(responseData);
+
+      } catch(err) {
+        console.log(err)
+      }
+    }
+
     auth.login();
   };
 
@@ -90,7 +114,7 @@ const Auth = () => {
           element="input"
           id="password"
           type="password"
-          label="E-Password"
+          label="Password"
           validators={[VALIDATOR_MINLENGTH(5)]}
           errorText="Please enter a valid password, at least 5 characters"
           onInput={inputHandler}
