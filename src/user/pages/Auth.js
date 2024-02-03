@@ -57,12 +57,10 @@ const Auth = () => {
 
   const authSubmitHandler = async (event) => {
     event.preventDefault();
-  
     if (isLoginMode) {
-
     } else {
       try {
-        const response = await fetch('http://localhost:5000/api/users/signup', {
+        const response = await fetch('http://localhost:5001/api/users/signup', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -74,14 +72,17 @@ const Auth = () => {
           })
         });
 
-        const responseData = response.json();
+        const responseData = await response.json();
+        if (!response.ok) {
+          throw new Error(responseData.message);
+        }
         console.log(responseData);
-
+        
       } catch(err) {
         console.log(err)
       }
     }
-
+    
     auth.login();
   };
 
