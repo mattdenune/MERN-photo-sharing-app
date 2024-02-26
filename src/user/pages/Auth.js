@@ -87,17 +87,18 @@ const Auth = () => {
       } catch (err) {}
     } else {
       try {
+        const formData = new FormData();
+        formData.append('email', formState.inputs.email.value)
+        formData.append('name', formState.inputs.name.value)
+        formData.append('password', formState.inputs.password.value)
+        formData.append('image', formState.inputs.image.value)
+
+        // * Fetch API will add it's own headers based on FormData so no need to include them.
+
         const responseData = await sendRequest(
           "http://localhost:5001/api/users/signup",
           "POST",
-          JSON.stringify({
-            name: formState.inputs.name.value,
-            email: formState.inputs.email.value,
-            password: formState.inputs.password.value,
-          }),
-          {
-            "Content-Type": "application/json",
-          }
+          formData,
         );
 
         auth.login(responseData.user.id);
