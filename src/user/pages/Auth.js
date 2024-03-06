@@ -67,7 +67,7 @@ const Auth = () => {
   const authSubmitHandler = async (event) => {
     event.preventDefault();
 
-    console.log(formState.inputs);
+    console.log("🚀 ~ authSubmitHandler ~ formState.inputs:", formState.inputs);
 
     if (isLoginMode) {
       try {
@@ -82,8 +82,9 @@ const Auth = () => {
             "Content-Type": "application/json",
           }
         );
+        console.log("🚀 ~ authSubmitHandler ~ responseData:", responseData)
 
-        auth.login(responseData.user.id);
+        auth.login(responseData.userId, responseData.token);
       } catch (err) {}
     } else {
       try {
@@ -100,12 +101,12 @@ const Auth = () => {
           "POST",
           formData,
         );
-
-        auth.login(responseData.user.id);
+        
+        console.log("🚀 ~ authSubmitHandler ~ responseData:", responseData)
+        auth.login(responseData.userId, responseData.token);
       } catch (err) {}
     }
   };
-
 
   return (
     <>
